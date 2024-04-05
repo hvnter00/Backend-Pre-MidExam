@@ -51,6 +51,22 @@ async function createUser(request, response, next) {
     const email = request.body.email;
     const password = request.body.password;
 
+    if (confirmPassword != password) {
+      throw errorResponder(
+        errorTypes,
+        INVALID_PASSWORD,
+        "Passwords don't match"
+      );
+    }
+
+    const SuccessEmail = await usersService.checkingEmail(email);
+    if (!successEmail) {
+      throw errorResponder(
+        errorTypes.EMAIL_ALREADY_TAKEN,
+        'Email is taken already by another user'
+      );
+    }
+
     const success = await usersService.createUser(name, email, password);
     if (!success) {
       throw errorResponder(

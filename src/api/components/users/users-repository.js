@@ -32,6 +32,14 @@ async function createUser(name, email, password) {
   });
 }
 
+async function emailChecker(name, email, password) {
+  return User.create({
+    name,
+    email,
+    password,
+  });
+}
+
 /**
  * Update existing user
  * @param {string} id - User ID
