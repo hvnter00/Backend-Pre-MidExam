@@ -35,7 +35,7 @@ module.exports = {
         .min(6)
         .max(32)
         .required()
-        .label('new Password'),
+        .label('New Password'),
       confirm_pasword: joi
         .string()
         .min(6)
