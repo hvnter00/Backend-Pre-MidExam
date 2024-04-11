@@ -19,9 +19,10 @@ async function getUser(id) {
 
 /**
  * Create new user
- * @param {string} name - Name
- * @param {string} email - Email
- * @param {string} password - Hashed password
+ * @param {string} name
+ * @param {string} email
+ * @param {string} password
+ * @param {string} confirm_password
  * @returns {Promise}
  */
 async function createUser(name, email, password) {
@@ -32,12 +33,13 @@ async function createUser(name, email, password) {
   });
 }
 
-async function emailChecker(name, email, password) {
-  return User.create({
-    name,
-    email,
-    password,
-  });
+async function emailChecker(email) {
+  const emailExist = await User.findOne({ email: email });
+  if (emailExist) {
+    return null;
+  } else {
+    return email;
+  }
 }
 
 /**
@@ -85,6 +87,7 @@ module.exports = {
   getUsers,
   getUser,
   createUser,
+  emailChecker,
   updateUser,
   deleteUser,
   updatePassword,

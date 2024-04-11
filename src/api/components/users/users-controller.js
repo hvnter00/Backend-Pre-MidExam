@@ -50,17 +50,17 @@ async function createUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
+    const confirm_password = request.body.confirm_password;
 
-    if (confirmPassword != password) {
+    if (confirm_password != password) {
       throw errorResponder(
-        errorTypes,
-        INVALID_PASSWORD,
+        errorTypes.INVALID_PASSWORD,
         "Passwords don't match"
       );
     }
 
-    const SuccessEmail = await usersService.checkingEmail(email);
-    if (!successEmail) {
+    const SuccessEmail = await usersService.emailChecker(email);
+    if (!SuccessEmail) {
       throw errorResponder(
         errorTypes.EMAIL_ALREADY_TAKEN,
         'Email is taken already by another user'
@@ -93,6 +93,14 @@ async function updateUser(request, response, next) {
     const id = request.params.id;
     const name = request.body.name;
     const email = request.body.email;
+
+    const SuccessEmail = await usersService.emailChecker(email);
+    if (!SuccessEmail) {
+      throw errorResponder(
+        errorTypes.EMAIL_ALREADY_TAKEN,
+        'Email is taken already by another user'
+      );
+    }
 
     const success = await usersService.updateUser(id, name, email);
     if (!success) {
@@ -138,12 +146,12 @@ async function updatePassword(request, response, next) {
     const id = request.params.id;
     const old_password = request.body.old_password;
     const new_password = request.body.new_password;
-    const confirmPassword = request.body.confirm_Password;
+    const confirmPassword = request.body.confirm_password;
     if (confirmPassword != new_password) {
       throw errorResponder(errorTypes.INVALID_PASSWORD, 'Invalid Password');
     }
 
-    const successUpdate = await usersService.updatePassword(
+    const successUpdate = await usersService.passwordUpdate(
       id,
       old_password,
       new_password
@@ -166,4 +174,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  updatePassword,
 };

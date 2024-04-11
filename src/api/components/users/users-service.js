@@ -62,6 +62,20 @@ async function createUser(name, email, password) {
 }
 
 /**
+ * Email Checker
+ * @param {string} email - Email
+ * @returns {boolean}
+ */
+async function emailChecker(email) {
+  const emailChecked = await usersRepository.emailChecker(email);
+  if (!emailChecked) {
+    return null;
+  } else {
+    return true;
+  }
+}
+
+/**
  * Update existing user
  * @param {string} id - User ID
  * @param {string} name - Name
@@ -142,6 +156,8 @@ module.exports = {
   getUsers,
   getUser,
   createUser,
+  emailChecker,
   updateUser,
   deleteUser,
+  passwordUpdate,
 };
