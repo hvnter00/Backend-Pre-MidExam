@@ -36,10 +36,9 @@ module.exports = (app) => {
   route.delete('/:id', authenticationMiddleware, usersControllers.deleteUser);
 
   // Password Update
-  route.patch(
-    '/:id/change-password',
+  route.patch('/:id/change-password', function (req, res) {
     authenticationMiddleware,
-    celebrate(usersValidator.updatePassword),
-    usersControllers.updatePassword
-  );
+      celebrate(usersValidator.updatePassword),
+      usersControllers.updatePassword;
+  });
 };
