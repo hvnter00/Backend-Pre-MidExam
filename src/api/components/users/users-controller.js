@@ -133,6 +133,33 @@ async function deleteUser(request, response, next) {
   }
 }
 
+async function updatePassword(request, response, next) {
+  try {
+    const id = request.params.id;
+    const old_password = request.body.old_password;
+    const new_password = request.body.new_password;
+    const confirmPassword = request.body.confirm_Password;
+    if (confirmPassword != new_password) {
+      throw errorResponder(errorTypes.INVALID_PASSWORD, 'Invalid Password');
+    }
+
+    const successUpdate = await usersService.updatePassword(
+      id,
+      old_password,
+      new_password
+    );
+    if (!successUpdate) {
+      throw errorResponder(
+        errorTypes.INVALID_PASSWORD,
+        'The provided password is incorrect'
+      );
+    }
+    return response.status(200).json([id, old_password, new_password]);
+  } catch (err) {
+    return next(err);
+  }
+}
+
 module.exports = {
   getUsers,
   getUser,
